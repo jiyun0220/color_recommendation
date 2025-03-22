@@ -40,14 +40,6 @@ function App() {
     setPalettes(generateColorPalettes(randomColor));
   };
 
-  const handleRefresh = () => {
-    if (palettes.length > 0) {
-      const newColor = generateRandomColor();
-      setColor(newColor);
-      setPalettes(generateColorPalettes(newColor));
-    }
-  };
-
   return (
     <Container>
       <Header>
@@ -66,11 +58,6 @@ function App() {
             <Button type="button" onClick={handleRandomPalettes}>
               🎲 랜덤 추천
             </Button>
-            {palettes.length > 0 && (
-              <Button type="button" variant="secondary" onClick={handleRefresh}>
-                🔄 새로고침
-              </Button>
-            )}
           </ButtonGroup>
         </InputContainer>
       </form>
