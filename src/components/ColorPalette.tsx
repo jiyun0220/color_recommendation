@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const PaletteContainer = styled.div`
@@ -25,6 +25,7 @@ const ColorCard = styled.div<{ color: string }>`
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
@@ -32,19 +33,127 @@ const ColorCard = styled.div<{ color: string }>`
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: transform 0.2s;
+  position: relative;
 
   &:hover {
     transform: scale(1.05);
   }
 `;
 
+const CopyMessage = styled.div<{ show: boolean }>`
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: ${props => props.show ? 1 : 0};
+  transition: opacity 0.2s;
+`;
+
+const PaletteHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+`;
+
 const PaletteTitle = styled.h3`
   color: #6c5ce7;
-  margin-bottom: 1rem;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin: 0;
+`;
+
+const PreviewButton = styled.button`
+  background: none;
+  border: none;
+  color: #6c5ce7;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(108, 92, 231, 0.1);
+  }
+`;
+
+const PreviewContainer = styled.div<{ show: boolean }>`
+  height: ${props => props.show ? 'auto' : '0'};
+  overflow: hidden;
+  transition: height 0.3s;
+  margin-top: ${props => props.show ? '1rem' : '0'};
+`;
+
+const PreviewContent = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+`;
+
+const PreviewItem = styled.div<{ colors: string[] }>`
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &.app-icon {
+    background: ${props => props.colors[0]};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: ${props => props.colors[1] || '#fff'};
+  }
+
+  &.website-header {
+    background: ${props => props.colors[0]};
+    padding: 1rem;
+    
+    .nav {
+      background: ${props => props.colors[1] || 'rgba(255, 255, 255, 0.1)'};
+      height: 40px;
+      border-radius: 4px;
+    }
+    
+    .content {
+      margin-top: 1rem;
+      height: 100px;
+      background: ${props => props.colors[2] || 'rgba(255, 255, 255, 0.05)'};
+      border-radius: 4px;
+    }
+  }
+
+  &.logo {
+    background: ${props => props.colors[0]};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: ${props => props.colors[1] || '#fff'};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: ${props => props.colors[2] || props.colors[0]};
+    }
+  }
 `;
 
 interface ColorPaletteProps {
@@ -54,20 +163,54 @@ interface ColorPaletteProps {
 }
 
 const ColorPalette: React.FC<ColorPaletteProps> = ({ title, colors, emoji }) => {
+  const [showPreview, setShowPreview] = useState(false);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
+
+  const handleColorClick = (color: string) => {
+    navigator.clipboard.writeText(color).then(() => {
+      setCopyMessage(color);
+      setTimeout(() => setCopyMessage(null), 1000);
+    });
+  };
+
   return (
     <PaletteContainer>
-      <PaletteTitle>
-        {emoji} {title}
-      </PaletteTitle>
+      <PaletteHeader>
+        <PaletteTitle>
+          {emoji} {title}
+        </PaletteTitle>
+        <PreviewButton onClick={() => setShowPreview(!showPreview)}>
+          {showPreview ? '👆 미리보기 접기' : '👇 미리보기 보기'}
+        </PreviewButton>
+      </PaletteHeader>
       <PaletteRow>
         {colors.map((color, index) => (
-          <ColorCard key={index} color={color}>
+          <ColorCard 
+            key={index} 
+            color={color} 
+            onClick={() => handleColorClick(color)}
+          >
+            <CopyMessage show={copyMessage === color}>복사됨!</CopyMessage>
             {color}
           </ColorCard>
         ))}
       </PaletteRow>
+      <PreviewContainer show={showPreview}>
+        <PreviewContent>
+          <PreviewItem colors={colors} className="app-icon">
+            A
+          </PreviewItem>
+          <PreviewItem colors={colors} className="website-header">
+            <div className="nav"></div>
+            <div className="content"></div>
+          </PreviewItem>
+          <PreviewItem colors={colors} className="logo">
+            <div className="circle">L</div>
+          </PreviewItem>
+        </PreviewContent>
+      </PreviewContainer>
     </PaletteContainer>
   );
 };
 
-export default ColorPalette; 
+export default ColorPalette;
