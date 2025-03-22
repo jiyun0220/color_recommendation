@@ -10,37 +10,63 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #f8f9fa;
-  padding: 2rem;
+  padding: 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
 `;
 
 const Header = styled.header`
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  
+  @media (min-width: 768px) {
+    margin-bottom: 3rem;
+  }
 `;
 
 const Title = styled.h1`
   color: #6c5ce7;
   margin-bottom: 0.5rem;
-  font-size: 3rem;
+  font-size: 2rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: center;
+  
+  @media (min-width: 768px) {
+    font-size: 3rem;
+  }
 `;
 
 const Subtitle = styled.p`
   color: #a8a8e6;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin: 0;
+  
+  @media (min-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const InputContainer = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 1rem;
   margin-bottom: 2rem;
   background: white;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 400px;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    padding: 1.5rem;
+    max-width: none;
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -54,11 +80,17 @@ const SubmitButton = styled.button`
   transition: all 0.3s;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  width: 100%;
 
   &:hover {
     background-color: #5b4bc4;
     transform: translateY(-2px);
+  }
+  
+  @media (min-width: 768px) {
+    width: auto;
   }
 `;
 
@@ -98,25 +130,20 @@ function App() {
         </Title>
         <Subtitle>당신의 색상에 어울리는 조합을 찾아드립니다</Subtitle>
       </Header>
-
       <form onSubmit={handleSubmit}>
         <InputContainer>
-          <ColorPicker
-            color={color}
-            onChange={setColor}
-          />
+          <ColorPicker color={color} onChange={setColor} />
           <SubmitButton type="submit">
-            추천받기 ✨
+            🔍 조합 찾기
           </SubmitButton>
         </InputContainer>
       </form>
-
       <PalettesContainer>
         {palettes.map((palette, index) => (
           <ColorPalette
             key={index}
-            title={paletteTitles[index].title}
             colors={palette}
+            title={paletteTitles[index].title}
             emoji={paletteTitles[index].emoji}
           />
         ))}
@@ -125,4 +152,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
