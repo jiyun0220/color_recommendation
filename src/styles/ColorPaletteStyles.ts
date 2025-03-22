@@ -4,10 +4,11 @@ export const PaletteContainer = styled.div`
   width: 100%;
   background: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  padding: 1rem 2rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  padding: 1rem;
+
+  @media (min-width: 640px) {
+    padding: 1rem 2rem;
+  }
 `;
 
 export const PaletteHeader = styled.div`
@@ -90,7 +91,11 @@ export const PreviewContainer = styled.div<{ show: boolean }>`
   overflow: hidden;
   transition: all 0.2s;
   opacity: ${props => props.show ? 1 : 0};
-  margin: 1rem -2rem -1rem;
+  margin: 1rem -1rem -1rem;
+
+  @media (min-width: 640px) {
+    margin: 1rem -2rem -1rem;
+  }
 `;
 
 export const PreviewContent = styled.div`
@@ -98,7 +103,11 @@ export const PreviewContent = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
   background: #F9FAFB;
-  padding: 1rem 2rem;
+  padding: 1rem;
+
+  @media (min-width: 640px) {
+    padding: 1rem 2rem;
+  }
 `;
 
 export const PreviewItem = styled.div<{ colors: string[] }>`
