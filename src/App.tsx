@@ -6,6 +6,10 @@ import { paletteTitles } from './constants/paletteData';
 import {
   Container,
   Header,
+  HeaderContent,
+  Logo,
+  Main,
+  MainHeader,
   Title,
   Subtitle,
   InputContainer,
@@ -15,7 +19,7 @@ import {
 } from './styles/AppStyles';
 
 function App() {
-  const [color, setColor] = useState('#FF0000');
+  const [color, setColor] = useState('#8B5CF6');
   const [palettes, setPalettes] = useState<string[][]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -43,34 +47,40 @@ function App() {
   return (
     <Container>
       <Header>
-        <Title>
-          🎨 Ji's Recommend
-        </Title>
-        <Subtitle>당신의 색상에 어울리는 조합을 찾아드립니다</Subtitle>
+        <HeaderContent>
+          <Logo>
+            <img src="/logo.svg" alt="Ji's Recommend" />
+            <span>Ji's Recommend</span>
+          </Logo>
+        </HeaderContent>
       </Header>
-      <form onSubmit={handleSubmit}>
-        <InputContainer>
-          <ColorPicker color={color} onChange={setColor} />
-          <ButtonGroup>
-            <Button type="submit">
-              🔍 조합 찾기
-            </Button>
-            <Button type="button" onClick={handleRandomPalettes}>
-              🎲 랜덤 추천
-            </Button>
-          </ButtonGroup>
-        </InputContainer>
-      </form>
-      <PalettesContainer>
-        {palettes.map((palette, index) => (
-          <ColorPalette
-            key={index}
-            colors={palette}
-            title={paletteTitles[index].title}
-            emoji={paletteTitles[index].emoji}
-          />
-        ))}
-      </PalettesContainer>
+      <Main>
+        <MainHeader>
+          <Title>당신의 색상에 어울리는 조합을 찾아드립니다</Title>
+          <Subtitle>원하는 색상 코드를 입력하고 조합 찾기 버튼을 눌러보세요</Subtitle>
+        </MainHeader>
+        <form onSubmit={handleSubmit}>
+          <InputContainer>
+            <ColorPicker color={color} onChange={setColor} />
+            <ButtonGroup>
+              <Button type="submit">조합 찾기</Button>
+              <Button type="button" onClick={handleRandomPalettes} variant="secondary">
+                랜덤 추천
+              </Button>
+            </ButtonGroup>
+          </InputContainer>
+        </form>
+        <PalettesContainer>
+          {palettes.map((palette, index) => (
+            <ColorPalette
+              key={index}
+              colors={palette}
+              title={paletteTitles[index].title}
+              emoji={paletteTitles[index].emoji}
+            />
+          ))}
+        </PalettesContainer>
+      </Main>
     </Container>
   );
 }
