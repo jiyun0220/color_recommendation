@@ -16,22 +16,30 @@ const PaletteContainer = styled.div`
 `;
 
 const PaletteRow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  display: flex;
   gap: 0.5rem;
   padding: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
   
   @media (min-width: 768px) {
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     padding: 1rem;
+    overflow-x: visible;
   }
 `;
 
 const ColorCard = styled.div<{ color: string }>`
+  min-width: 100px;
   aspect-ratio: 1;
   background-color: ${props => props.color};
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -39,17 +47,22 @@ const ColorCard = styled.div<{ color: string }>`
   justify-content: center;
   color: white;
   font-weight: bold;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: transform 0.2s;
   position: relative;
   word-break: break-all;
-  padding: 0.5rem;
+  padding: 0.25rem;
   text-align: center;
+  flex-shrink: 0;
 
   @media (min-width: 768px) {
+    min-width: unset;
     font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    flex-shrink: 1;
   }
 
   &:hover {
@@ -101,15 +114,16 @@ const PreviewButton = styled.button`
   border: none;
   color: #6c5ce7;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
   display: flex;
   align-items: center;
-  padding: 4px;
+  padding: 4px 8px;
   border-radius: 4px;
   transition: background-color 0.2s;
 
   @media (min-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    padding: 4px 12px;
   }
 
   &:hover {
@@ -140,7 +154,7 @@ const PreviewContent = styled.div`
 `;
 
 const PreviewItem = styled.div<{ colors: string[] }>`
-  height: 150px;
+  height: 120px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -154,7 +168,7 @@ const PreviewItem = styled.div<{ colors: string[] }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: ${props => props.colors[1] || '#fff'};
     
     @media (min-width: 768px) {
@@ -164,7 +178,7 @@ const PreviewItem = styled.div<{ colors: string[] }>`
 
   &.website-header {
     background: ${props => props.colors[0]};
-    padding: 0.75rem;
+    padding: 0.5rem;
     
     @media (min-width: 768px) {
       padding: 1rem;
@@ -172,7 +186,7 @@ const PreviewItem = styled.div<{ colors: string[] }>`
     
     .nav {
       background: ${props => props.colors[1] || 'rgba(255, 255, 255, 0.1)'};
-      height: 30px;
+      height: 24px;
       border-radius: 4px;
       
       @media (min-width: 768px) {
@@ -181,8 +195,8 @@ const PreviewItem = styled.div<{ colors: string[] }>`
     }
     
     .content {
-      margin-top: 0.75rem;
-      height: 80px;
+      margin-top: 0.5rem;
+      height: 60px;
       background: ${props => props.colors[2] || 'rgba(255, 255, 255, 0.05)'};
       border-radius: 4px;
       
@@ -200,14 +214,14 @@ const PreviewItem = styled.div<{ colors: string[] }>`
     justify-content: center;
     
     .circle {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       background: ${props => props.colors[1] || '#fff'};
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       color: ${props => props.colors[2] || props.colors[0]};
       
       @media (min-width: 768px) {
@@ -243,7 +257,7 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ title, colors, emoji }) => 
           {emoji} {title}
         </PaletteTitle>
         <PreviewButton onClick={() => setShowPreview(!showPreview)}>
-          {showPreview ? '👆 미리보기 접기' : '👇 미리보기 보기'}
+          {showPreview ? '미리보기 접기' : '미리보기'}
         </PreviewButton>
       </PaletteHeader>
       <PaletteRow>
